@@ -282,16 +282,19 @@
             document.getElementById('login-screen').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function showLogin(push = true) {
-            document.getElementById('intro-wrapper').style.display = 'block';
-            document.getElementById('main-interface').style.display = 'none';
-            document.getElementById('admin-panel').style.display = 'none';
-            document.getElementById('admin-back-btn').style.display = 'none';
-            document.getElementById('config-btn').style.display = 'none';
-            document.getElementById('logout-btn').style.display = 'none';
-            if(push) history.pushState({page: 'login'}, "Login", "#login");
-            window.scrollTo(0,0);
-        }
+function showLogin(push = true) {
+    document.getElementById('intro-wrapper').style.display = 'block';
+    document.getElementById('main-interface').style.display = 'none';
+    document.getElementById('admin-panel').style.display = 'none';
+    document.getElementById('admin-back-btn').style.display = 'none';
+    
+    // CAMBIO AQUÍ: 'block' para que se vea, o borra esta línea
+    document.getElementById('config-btn').style.display = 'block'; 
+    
+    document.getElementById('logout-btn').style.display = 'none';
+    if(push) history.pushState({page: 'login'}, "Login", "#login");
+    window.scrollTo(0,0);
+}
 
         // --- LOGIN ---
         function handleLogin() {
@@ -627,6 +630,7 @@ function logoutSystem() {
             document.getElementById('main-interface').style.display = 'none';
             document.getElementById('admin-panel').style.display = 'block';
             document.getElementById('logout-btn').style.display = 'none';
+            document.getElementById('config-btn').style.display = 'block';
 
             db.ref('users').on('value', (snapshot) => {
                 const list = document.getElementById('admin-user-list');
@@ -716,3 +720,4 @@ function exitViewMode() {
     </script>
 </body>
 </html>
+
