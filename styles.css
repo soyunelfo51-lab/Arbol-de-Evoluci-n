@@ -748,6 +748,34 @@ body.light-mode .btn-minus { background: var(--neon-purple) !important; color: w
     .config-item { display: block; margin-bottom: 8px; }
     .config-close { width: 100%; }
 
+    #config-btn { 
+        top: 5px !important;     /* Mucho más arriba */
+        right: 5px !important;   /* Más a la derecha (pegado al borde) */
+        left: auto !important;   /* Asegura que no se pegue a la izquierda */
+        width: 40px !important;  /* Tamaño cuadrado compacto */
+        height: 40px !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        z-index: 5000;
+    }
+
+    /* Botón Cerrar Sesión */
+    #logout-btn { 
+        top: 5px !important;     /* Mucho más arriba */
+        left: 5px !important;    /* Más a la izquierda (pegado al borde) */
+        right: auto !important;  /* Asegura que no se pegue a la derecha */
+        padding: 8px 10px !important; 
+        font-size: 10px !important; /* Letra pequeña para que no ocupe mucho */
+        z-index: 5000;
+    }
+
+    /* Ajuste extra: Mover el nombre de usuario un poco más abajo para que no choque */
+    #username-display {
+        margin-top: 40px; /* Empuja el nombre hacia abajo */
+    }
+
     /* Admin */
     #admin-panel { padding: 16px; }
     table { font-size: 12px; }
