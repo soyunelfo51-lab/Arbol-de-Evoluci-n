@@ -8,181 +8,7 @@
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
-    <style>
-        /* --- CONFIGURACIÓN VISUAL --- */
-        :root {
-            --neon-blue: #00f3ff; --neon-purple: #bc13fe; --neon-gold: #ffd700;
-            --danger-red: #ff2a2a; --dark-bg: #050510;
-            --glass-bg: rgba(20, 20, 40, 0.7); --glass-border: rgba(255, 255, 255, 0.1);
-            --line-color: #3a3a50;
-        }
-
-        * { box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background-color: var(--dark-bg);
-            color: #e0e0e0;
-            margin: 0;
-            min-height: 100vh;
-            overflow-x: hidden;
-            padding-bottom: 120px; 
-        }
-
-        /* --- FONDO ANIMADO --- */
-        .space-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%); z-index: -5; overflow: hidden; }
-        .star { position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%; animation: twinkle 5s infinite; }
-        .stars-layer { width: 1px; height: 1px; background: transparent; box-shadow: 10vw 10vh #fff, 20vw 40vh #fff, 50vw 80vh #fff, 80vw 10vh #fff, 90vw 50vh #fff, 30vw 20vh #fff, 60vw 30vh #fff; animation: starMove 100s linear infinite; }
-        @keyframes starMove { from { transform: translateY(0); } to { transform: translateY(-1000px); } }
-        @keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
-
-        /* --- GLITCH ERROR OVERLAY --- */
-        #glitch-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 9999; background: black;
-            justify-content: center; align-items: center; overflow: hidden;
-        }
-        #glitch-img {
-            width: 100%; height: 100%; object-fit: cover; opacity: 0.8;
-            mix-blend-mode: hard-light; animation: glitchFlash 0.15s infinite;
-            position: absolute; top:0; left:0;
-        }
-        .glitch-text-overlay {
-            position: relative; z-index: 10000;
-            font-size: 5em; color: var(--neon-purple);
-            font-weight: 900; text-transform: uppercase; letter-spacing: 5px;
-            text-shadow: 0 0 20px var(--neon-purple), 4px 4px 0px black;
-            animation: textShake 0.2s infinite; text-align: center;
-        }
-        @keyframes textShake { 0% { transform: translate(0,0); } 25% { transform: translate(-5px, 5px); } 50% { transform: translate(5px, -5px); opacity: 0.8; } 75% { transform: translate(-5px, -5px); } 100% { transform: translate(0,0); opacity: 1; } }
-        @keyframes glitchFlash { 0% { transform: scale(1); filter: hue-rotate(0deg); opacity: 1; } 50% { transform: scale(1.02); filter: hue-rotate(90deg); opacity: 0.6; } }
-        .shake-screen { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both infinite; }
-        @keyframes shake { 10%, 90% { transform: translate3d(-4px, 0, 0); } 50% { transform: translate3d(4px, 0, 0); } }
-
-        /* --- INTRO & LOGIN --- */
-        #intro-wrapper { width: 100%; display: block; }
-        #welcome-screen { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; z-index: 10; text-align: center; }
-        .zero-point-orb { width: 200px; height: 200px; background: radial-gradient(circle, #fff, var(--neon-blue), var(--neon-purple), transparent 70%); border-radius: 50%; box-shadow: 0 0 50px var(--neon-blue), 0 0 100px var(--neon-purple); margin-bottom: 40px; animation: zeroPointPulse 4s infinite alternate; position: relative; }
-        .zero-point-orb::after { content: ''; position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px; border-radius: 50%; border: 2px dashed rgba(255,255,255,0.3); animation: spinOrb 10s linear infinite; }
-        @keyframes zeroPointPulse { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.1); opacity: 1; } }
-        @keyframes spinOrb { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .welcome-title { font-size: 4em; margin: 0; text-transform: uppercase; letter-spacing: 10px; background: linear-gradient(90deg, #fff, var(--neon-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 20px var(--neon-blue); animation: glitchText 3s infinite; }
-        .welcome-subtitle { font-size: 1.2em; color: var(--neon-purple); letter-spacing: 5px; margin-top: 10px; text-transform: uppercase; }
-        .scroll-down-btn { margin-top: 60px; background: transparent; border: 1px solid var(--neon-blue); color: var(--neon-blue); padding: 15px 40px; font-size: 18px; cursor: pointer; text-transform: uppercase; letter-spacing: 3px; transition: 0.3s; border-radius: 30px; }
-        .scroll-down-btn:hover { background: var(--neon-blue); color: black; box-shadow: 0 0 30px var(--neon-blue); }
-        .scroll-arrow { margin-top: 20px; font-size: 24px; color: white; animation: bounceArrow 2s infinite; }
-        @keyframes bounceArrow { 0%, 100% { transform: translateY(0); opacity: 0.5; } 50% { transform: translateY(10px); opacity: 1; } }
-
-        #login-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; width: 100%; position: relative; z-index: 10; background: linear-gradient(to bottom, transparent, rgba(5,5,16,0.95) 20%); }
-        .author-avatar-login { width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--neon-blue); box-shadow: 0 0 30px var(--neon-blue), inset 0 0 20px var(--neon-blue); margin-bottom: 25px; object-fit: cover; animation: pulseAvatar 3s infinite ease-in-out; }
-        @keyframes pulseAvatar { 0%, 100% { transform: scale(1); box-shadow: 0 0 30px var(--neon-blue); } 50% { transform: scale(1.05); box-shadow: 0 0 50px var(--neon-blue); } }
-        .login-box { background: var(--glass-bg); border: 1px solid var(--neon-purple); padding: 40px; border-radius: 12px; box-shadow: 0 0 40px rgba(188, 19, 254, 0.2); text-align: center; width: 320px; position: relative; z-index: 10; }
-        input { display: block; width: 100%; padding: 12px; margin: 15px 0; background: rgba(0,0,0,0.5); border: 1px solid #444; color: var(--neon-blue); border-radius: 4px; font-family: 'Rajdhani', sans-serif; font-weight: bold; letter-spacing: 1px; transition: 0.3s; }
-        input:focus { outline: none; border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 243, 255, 0.3); }
-        button { background: linear-gradient(90deg, var(--neon-purple), var(--neon-blue)); border: none; padding: 12px; color: white; font-weight: 700; font-size: 16px; cursor: pointer; border-radius: 4px; transition: 0.3s; text-transform: uppercase; letter-spacing: 2px; width: 100%; margin-top: 10px; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); }
-        button:hover { transform: translateY(-2px); box-shadow: 0 0 20px var(--neon-purple); }
-        .staff-login-area { margin-top: 40px; padding: 10px 20px; border-top: 1px solid #333; width: 300px; text-align: center; }
-        .staff-login-area p { margin: 0 0 8px 0; color: #555; font-size: 10px; letter-spacing: 2px; }
-        #staff-code-input { background: transparent; border: 1px solid #333; color: var(--danger-red); text-align: center; width: 100%; padding: 8px; font-size: 12px; }
-        #staff-code-input:focus { border-color: var(--danger-red); box-shadow: 0 0 10px rgba(255, 42, 42, 0.2); }
-
-        /* --- UI PRINCIPAL --- */
-        #main-interface { display: none; padding: 20px; animation: fadeIn 1s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .resources-hud { display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; }
-        .resource-circle { width: 70px; height: 70px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 700; border: 2px solid; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); position: relative; }
-        .res-blue { border-color: var(--neon-blue); color: var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); }
-        .res-yellow { border-color: var(--neon-gold); color: var(--neon-gold); box-shadow: 0 0 15px var(--neon-gold); }
-        .res-purple { border-color: var(--neon-purple); color: var(--neon-purple); box-shadow: 0 0 15px var(--neon-purple); }
-        .res-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: -2px; color: #fff; opacity: 0.8;}
-        .res-val { font-size: 22px; }
-        #username-display { text-align: center; font-size: 1.8em; color: white; text-shadow: 0 0 10px var(--neon-blue); margin-bottom: 30px; border-bottom: 1px solid var(--neon-blue); display: inline-block; padding: 0 20px 5px 20px; position: relative; left: 50%; transform: translateX(-50%); }
-
-        /* --- ÁRBOL --- */
-        .tree-container { display: flex; overflow-x: auto; width: 100%; padding-bottom: 30px; scrollbar-width: thin; scrollbar-color: var(--neon-blue) #111; }
-        .tree-container::-webkit-scrollbar { height: 8px; }
-        .tree-container::-webkit-scrollbar-track { background: #111; }
-        .tree-container::-webkit-scrollbar-thumb { background: var(--neon-blue); border-radius: 4px; }
-        .tree { white-space: nowrap; padding: 20px; margin: 0 auto; min-width: fit-content; }
-        .tree ul { padding-top: 25px; position: relative; display: flex; justify-content: center; }
-        .tree li { float: left; text-align: center; list-style-type: none; position: relative; padding: 25px 8px 0 8px; }
-        .tree li::before, .tree li::after { content: ''; position: absolute; top: 0; right: 50%; border-top: 1px solid var(--line-color); width: 50%; height: 25px; z-index: -1; }
-        .tree li::after { right: auto; left: 50%; border-left: 1px solid var(--line-color); }
-        .tree li:only-child::after, .tree li:only-child::before { display: none; }
-        .tree li:only-child { padding-top: 0; }
-        .tree li:first-child::before, .tree li:last-child::after { border: 0 none; }
-        .tree li:last-child::before { border-right: 1px solid var(--line-color); border-radius: 0 5px 0 0; }
-        .tree li:first-child::after { border-radius: 5px 0 0 0; }
-        .tree ul ul::before { content: ''; position: absolute; top: 0; left: 50%; border-left: 1px solid var(--line-color); width: 0; height: 25px; }
-        .tree li.unlocked::before, .tree li.unlocked::after, .tree li.unlocked > ul ul::before { border-color: var(--neon-blue); box-shadow: 0 0 8px var(--neon-blue); }
-    
-        /* --- BOTÓN CERRAR SESIÓN --- */   
-        #logout-btn {
-          /* POSICIÓN */
-          position: fixed;
-         top: 20px;
-         right: 20px;
-         z-index: 5000;
-
-          /* TAMAÑO - AQUÍ ESTÁ EL ARREGLO */
-          width: auto !important; /* Fuerza al botón a ser solo del tamaño del texto */
-         display: inline-block;  /* Asegura que no ocupe toda la línea */
-         padding: 5px 15px;      /* Relleno pequeño */
-
-          /* ESTILO VISUAL */
-          background: rgba(40, 0, 0, 0.6); 
-          border: 1px solid var(--danger-red);
-         color: var(--danger-red);
-          font-family: 'Rajdhani', sans-serif;
-          font-size: 10px;
-          font-weight: bold;
-          letter-spacing: 1px;
-          cursor: pointer;
-          text-transform: uppercase;
-    
-          /* EFECTOS */
-          clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);transition: all 0.3s ease;
-        }
-
-        #logout-btn:hover {
-           background: var(--danger-red);
-         color: white;
-          box-shadow: 0 0 10px var(--danger-red);
-        }
-
-        /* NODOS */
-        .node { border: 1px solid #444; background: rgba(10, 10, 20, 0.9); padding: 10px 12px; text-decoration: none; color: #888; font-size: 12px; display: inline-flex; align-items: center; gap: 8px; border-radius: 4px; transition: all 0.3s; cursor: pointer; min-width: 100px; max-width: 140px; white-space: normal; line-height: 1.2; position: relative; text-align: left; clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); }
-        .node-icon { width: 28px; height: 28px; border-radius: 4px; border: 1px solid var(--line-color); padding: 2px; filter: grayscale(80%); transition: 0.3s; }
-        .node.unlocked { border-color: var(--neon-blue); color: #fff; background: rgba(0, 243, 255, 0.15); box-shadow: 0 0 15px rgba(0, 243, 255, 0.4); }
-        .node.unlocked .node-icon { border-color: var(--neon-blue); filter: grayscale(0%) drop-shadow(0 0 5px var(--neon-blue)); }
-        .node.locked-forever { border-color: #222; background: #080808; color: #333; cursor: not-allowed; opacity: 0.7; }
-        .node.locked-forever::after { content: '🔒'; position: absolute; top: -8px; right: -5px; font-size: 12px; filter: grayscale(100%);}
-        .node:hover:not(.locked-forever) { transform: scale(1.1); z-index: 100; background: var(--neon-purple); border-color: white; color: white; box-shadow: 0 0 25px var(--neon-purple); }
-        .desc { font-size: 9px; color: #aaa; display: block; margin-top: 3px; font-style: italic; font-weight: normal;}
-
-        /* --- FOOTER --- */
-        footer { position: fixed; bottom: 0; left: 0; width: 100%; padding: 20px; border-top: 1px solid var(--neon-purple); background: rgba(5, 5, 10, 0.98); z-index: 200; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(8px); box-shadow: 0 -5px 30px rgba(0,0,0,0.9); }
-        .footer-content { display: flex; align-items: center; gap: 20px; }
-        .footer-img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); }
-
-        /* --- ADMIN PANEL --- */
-        #admin-panel { display: none; padding: 40px; background: #0a0a12; min-height: 100vh; }
-        .admin-header { color: var(--danger-red); border-bottom: 1px solid var(--danger-red); margin-bottom: 20px; font-family: 'Rajdhani'; text-transform: uppercase;}
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; color: #ccc; font-size: 14px; }
-        th, td { border: 1px solid #333; padding: 8px; text-align: center; }
-        th { background: #111; color: var(--danger-red); text-transform: uppercase; letter-spacing: 1px;}
-        tr:hover { background: #111; }
-        .btn-admin { padding: 4px 8px; font-size: 10px; margin: 0 2px; cursor: pointer; border:none; border-radius: 2px; text-transform: uppercase; font-weight: bold;}
-        .btn-plus { background: var(--neon-blue); color: #000; }
-        .btn-minus { background: #333; color: #fff; }
-        .btn-del { background: var(--danger-red); color: white; }
-        .btn-view { background: var(--neon-gold); color: black; }
-        #admin-back-btn { display: none; position: fixed; bottom: 90px; /* Lo ponemos abajo, encima del footer */right: 20px; /* A la derecha */background: rgba(255, 42, 42, 0.6); /* Rojo semitransparente */color: white; padding: 5px 15px; /* Más pequeño */font-size: 10px; /* Letra pequeña */z-index: 1000; box-shadow: 0 0 10px var(--danger-red); border: 1px solid rgba(255,255,255,0.3); font-weight: bold; cursor: pointer; text-transform: uppercase;clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); transition: all 0.3s ease;}
-        #admin-back-btn:hover {background: var(--danger-red);opacity: 1;transform: scale(1.1); box-shadow: 0 0 20px var(--danger-red);}
-        
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -213,15 +39,29 @@
                 <input type="password" id="password" placeholder="CONTRASEÑA">
                 <button onclick="handleLogin()">CONECTAR AL BUCLE</button>
             </div>
-            <div class="staff-login-area">
-                <p>// ACCESO CLASIFICADO //</p>
-                <input type="password" id="staff-code-input" placeholder="CÓDIGO DE MANDO" onkeydown="checkStaffCode(event)">
-            </div>
         </div>
     </div>
 
+    <!-- BOTONES DE CONTROL FIJOS -->
+    <button id="config-btn" onclick="toggleConfigMenu()">☰</button>
+    <button id="logout-btn" onclick="logoutSystem()" style="display: none;">CERRAR SESIÓN</button>
+    <div id="config-menu" class="config-menu">
+        <div class="config-item">
+            <label>Modo Tema:</label>
+            <select id="theme-select" onchange="changeTheme(this.value)">
+                <option value="dark">Oscuro</option>
+                <option value="light">Claro</option>
+                <option value="auto">Auto</option>
+            </select>
+        </div>
+        <div class="config-item">
+            <label>// ACCESO CLASIFICADO //</label>
+            <input type="password" id="config-staff-code" placeholder="CÓDIGO DE MANDO" onkeydown="checkStaffCodeFromConfig(event)">
+        </div>
+        <button onclick="closeConfigMenu()" class="config-close">Cerrar</button>
+    </div>
+
     <div id="main-interface">
-        <button id="logout-btn" onclick="logoutSystem()">CERRAR SESIÓN</button>
         <button id="admin-back-btn" onclick="exitViewMode()">CERRAR VISTA REMOTA</button>
 
         <div class="resources-hud">
@@ -447,6 +287,8 @@
             document.getElementById('main-interface').style.display = 'none';
             document.getElementById('admin-panel').style.display = 'none';
             document.getElementById('admin-back-btn').style.display = 'none';
+            document.getElementById('config-btn').style.display = 'none';
+            document.getElementById('logout-btn').style.display = 'none';
             if(push) history.pushState({page: 'login'}, "Login", "#login");
             window.scrollTo(0,0);
         }
@@ -518,7 +360,8 @@
             
             document.getElementById('intro-wrapper').style.display = 'none';
             document.getElementById('main-interface').style.display = 'block';
-            document.getElementById('admin-panel').style.display = 'none'; 
+            document.getElementById('admin-panel').style.display = 'none';
+            document.getElementById('config-btn').style.display = 'block';
             
             // Si entramos desde historial y no tenemos user cargado
             if(!currentUser && !isAdminViewing) {
@@ -529,7 +372,12 @@
             document.getElementById('tree-username').innerText = currentUser;
             document.getElementById('username-display').innerText = isAdminViewing ? "VISTA REMOTA: " + currentUser : "Agente: " + currentUser;
             
-            document.getElementById('logout-btn').style.display = isAdminViewing ? 'none' : 'block';
+            // El logout-btn solo en árbol normal del usuario, no en vista remota
+            if(!isAdminViewing) {
+                document.getElementById('logout-btn').style.display = 'block';
+            } else {
+                document.getElementById('logout-btn').style.display = 'none';
+            }
 
             updateHUD();
             renderTreeState();
@@ -691,6 +539,75 @@ function logoutSystem() {
 }
 
 
+        // --- CONFIGURACIÓN MENÚ ---
+        function toggleConfigMenu() {
+            const menu = document.getElementById('config-menu');
+            const btn = document.getElementById('config-btn');
+            menu.classList.toggle('active');
+            btn.classList.toggle('active');
+        }
+
+        function closeConfigMenu() {
+            const menu = document.getElementById('config-menu');
+            const btn = document.getElementById('config-btn');
+            menu.classList.remove('active');
+            btn.classList.remove('active');
+        }
+
+        // Theme handling with Auto (system preference)
+        (function(){
+            const mq = window.matchMedia('(prefers-color-scheme: light)');
+            let mqListener = null;
+
+            function applyThemeChoice(choice) {
+                if(choice === 'light') {
+                    document.body.classList.add('light-mode');
+                    localStorage.setItem('noxTheme', 'light');
+                    if(mqListener) { mq.removeEventListener('change', mqListener); mqListener = null; }
+                } else if(choice === 'dark') {
+                    document.body.classList.remove('light-mode');
+                    localStorage.setItem('noxTheme', 'dark');
+                    if(mqListener) { mq.removeEventListener('change', mqListener); mqListener = null; }
+                } else { // auto
+                    localStorage.setItem('noxTheme', 'auto');
+                    const applyFromSystem = (e) => {
+                        const isLight = e ? e.matches : mq.matches;
+                        if(isLight) document.body.classList.add('light-mode'); else document.body.classList.remove('light-mode');
+                    };
+                    // apply immediately
+                    applyFromSystem();
+                    // listen to changes
+                    mqListener = applyFromSystem;
+                    mq.addEventListener('change', mqListener);
+                }
+            }
+
+            window.changeTheme = function(theme) {
+                applyThemeChoice(theme);
+            }
+
+            // On load, restore saved theme (supports 'auto')
+            window.addEventListener('load', () => {
+                const savedTheme = localStorage.getItem('noxTheme') || 'dark';
+                // set select value if present
+                const sel = document.getElementById('theme-select');
+                if(sel) sel.value = savedTheme;
+                applyThemeChoice(savedTheme);
+            });
+        })();
+
+        function checkStaffCodeFromConfig(e) {
+            if(e.key === 'Enter') {
+                if(document.getElementById('config-staff-code').value === "StaffBuclEvoPuntNad") {
+                    closeConfigMenu();
+                    loadAdminPanel();
+                    document.getElementById('config-staff-code').value = "";
+                } else {
+                    alert("Acceso Denegado");
+                }
+            }
+        }
+
         // --- STAFF / ADMIN ---
         function checkStaffCode(e) {
             if(e.key === 'Enter') {
@@ -709,6 +626,7 @@ function logoutSystem() {
             document.getElementById('intro-wrapper').style.display = 'none';
             document.getElementById('main-interface').style.display = 'none';
             document.getElementById('admin-panel').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'none';
 
             db.ref('users').on('value', (snapshot) => {
                 const list = document.getElementById('admin-user-list');
@@ -767,6 +685,7 @@ window.viewUserTree = function(userKey) {
             document.getElementById('admin-panel').style.display = 'none';
             document.getElementById('main-interface').style.display = 'block';
             document.getElementById('admin-back-btn').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'none';
             
             // Textos
             document.getElementById('tree-username').innerText = currentUser;
