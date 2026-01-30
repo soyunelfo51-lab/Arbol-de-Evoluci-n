@@ -685,101 +685,6 @@ body.light-mode table, body.light-mode th, body.light-mode td, body.light-mode t
 
 body.light-mode .btn-minus { background: var(--neon-purple) !important; color: white !important; }
 
-/* --- RESPONSIVE / MOBILE --- */
-@media (max-width: 900px) {
-
-    /* 1. BOTONES: Pegados a las esquinas superiores */
-    #config-btn { 
-        top: 10px !important;    
-        right: 10px !important;   
-        left: auto !important;
-        width: 40px !important; 
-        height: 40px !important;
-        padding: 0 !important;
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        z-index: 5000;
-    }
-
-    #logout-btn { 
-        top: 10px !important;    
-        left: 10px !important;   
-        right: auto !important;
-        padding: 8px 10px !important; 
-        font-size: 10px !important;
-        z-index: 5000;
-    }
-
-    /* 2. NOMBRE AGENTE: Centrado arriba, entre los botones */
-    #username-display {
-        display: block;
-        margin-top: 15px;        /* Espacio desde el techo */
-        margin-bottom: 0px;
-        font-size: 20px;         /* Tamaño ajustado para móvil */
-        position: relative;
-        z-index: 1100;
-    }
-
-    /* 3. PUNTOS (HUD): Debajo del nombre */
-    .resources-hud { 
-        position: fixed; 
-        top: 60px;               /* AQUÍ ESTÁ EL CAMBIO: Baja los puntos para que no toquen el nombre */
-        left: 0; 
-        right: 0; 
-        display: flex; 
-        justify-content: center; 
-        gap: 15px;               /* Espacio entre círculos */
-        z-index: 1200; 
-        pointer-events: none;
-    }
-
-    /* Ajuste visual de los círculos */
-    .resource-circle { 
-        width: 50px; 
-        height: 50px; 
-        font-size: 11px; 
-        pointer-events: auto; 
-        background: rgba(0, 0, 0, 0.8); /* Fondo más oscuro para que se lea mejor */
-    }
-    .res-label { display: block; font-size: 8px; }
-
-    /* 4. ÁRBOL: Empujado hacia abajo para que no empiece detrás de los puntos */
-    #main-interface { 
-        padding-top: 140px;      /* Espacio reservado para Nombre + Puntos */
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-
-    /* SCROLL HORIZONTAL (Arreglado) */
-    .tree-container { 
-        padding: 10px; 
-        overflow-x: auto; 
-        display: block; 
-        text-align: center; 
-        white-space: nowrap; 
-        -webkit-overflow-scrolling: touch; 
-    }
-    .tree { 
-        display: inline-block; 
-        min-width: auto; 
-        padding-right: 40px; 
-    }
-
-    /* Nodos más pequeños */
-    .node { min-width: 80px; max-width: 120px; padding: 8px; font-size: 12px; }
-    .node .node-icon { width: 22px; height: 22px; }
-
-    /* Configuración y Admin */
-    #config-menu { left: 10px; right: 10px; top: auto; bottom: 10px; width: auto; border-radius: 10px; padding: 12px; }
-    .config-item { display: block; margin-bottom: 8px; }
-    .config-close { width: 100%; }
-    
-    #admin-back-btn { bottom: 20px; right: 12px; }
-    #admin-panel { padding: 16px; padding-top: 60px; } /* Padding extra en admin por los botones */
-    table { font-size: 12px; }
-    th, td { padding: 6px; }
-}
 
 /* --- CONFIGURACIÓN VISUAL --- */
 :root {
@@ -1237,7 +1142,7 @@ button:hover { transform: translateY(-2px); box-shadow: 0 0 20px var(--neon-purp
 #config-btn {
   position: fixed;
   top: 20px;
-  right: 80px;
+  right: 20px;
   z-index: 5000;
   width: auto !important;
   display: inline-block;
