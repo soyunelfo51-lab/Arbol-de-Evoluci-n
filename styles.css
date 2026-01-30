@@ -687,72 +687,13 @@ body.light-mode .btn-minus { background: var(--neon-purple) !important; color: w
 
 /* --- RESPONSIVE / MOBILE --- */
 @media (max-width: 900px) {
-    
-    /* CORRECCIÓN 1: Puntos demasiado separados */
-    .resources-hud { 
-        position: fixed; 
-        top: 80px; 
-        left: 0; 
-        right: 0; /* Ocupa todo el ancho */
-        display: flex; 
-        justify-content: center; /* CAMBIO: Centrados en lugar de separados a los bordes */
-        gap: 20px; /* Espacio fijo entre ellos */
-        z-index: 1200; 
-        pointer-events: none; /* Permite hacer clic a través de los huecos vacíos */
-    }
-    /* Reactivar clicks en los círculos */
-    .resource-circle { 
-        width: 52px; 
-        height: 52px; 
-        font-size: 12px; 
-        pointer-events: auto; 
-    }
-    .res-label { display: block; font-size: 9px; }
 
-    /* Reduce los márgenes generales */
-    #main-interface { padding: 10px; }
-
-    /* Caja de login */
-    #login-screen .login-box { width: calc(100% - 40px); margin: 20px auto; padding: 18px; box-shadow: 0 0 30px rgba(102,0,255,0.15); }
-    #login-screen .login-box h1 { font-size: 20px; }
-    #login-screen input { padding: 10px; font-size: 14px; }
-    #login-screen .scroll-down-btn { padding: 10px 12px; font-size: 14px; }
-
-    /* CORRECCIÓN 2: No deja desplazar a izquierda/derecha */
-    .tree-container { 
-        padding: 10px; 
-        overflow-x: auto; 
-        display: block; /* CAMBIO: De flex a block para evitar corte izquierdo */
-        text-align: center; /* Centra si es pequeño */
-        white-space: nowrap; /* Asegura línea horizontal */
-        -webkit-overflow-scrolling: touch; /* Suavidad en iPhone */
-    }
-    .tree { 
-        display: inline-block; /* Permite que el scroll funcione correctamente */
-        margin: 0; /* Quitar auto margins para evitar bloqueo de scroll */
-        min-width: auto; /* Dejar que el contenido defina el ancho */
-        padding-right: 40px; /* Espacio extra para ver bien el final */
-    }
-
-    /* Reduce el tamaño de los nodos */
-    .node { min-width: 80px; max-width: 120px; padding: 8px; font-size: 12px; }
-    .node .node-icon { width: 22px; height: 22px; }
-
-    /* Botones flotantes */
-    #config-btn { right: 12px; top: 12px; left: auto; }
-    #logout-btn { left: 12px; top: 12px; right: auto; }
-    #admin-back-btn { bottom: 20px; right: 12px; }
-
-    /* Configuración */
-    #config-menu { left: 10px; right: 10px; top: auto; bottom: 10px; width: auto; border-radius: 10px; padding: 12px; }
-    .config-item { display: block; margin-bottom: 8px; }
-    .config-close { width: 100%; }
-
+    /* 1. BOTONES: Pegados a las esquinas superiores */
     #config-btn { 
-        top: 5px !important;     /* Mucho más arriba */
-        right: 5px !important;   /* Más a la derecha (pegado al borde) */
-        left: auto !important;   /* Asegura que no se pegue a la izquierda */
-        width: 40px !important;  /* Tamaño cuadrado compacto */
+        top: 10px !important;    
+        right: 10px !important;   
+        left: auto !important;
+        width: 40px !important; 
         height: 40px !important;
         padding: 0 !important;
         display: flex !important;
@@ -761,23 +702,81 @@ body.light-mode .btn-minus { background: var(--neon-purple) !important; color: w
         z-index: 5000;
     }
 
-    /* Botón Cerrar Sesión */
     #logout-btn { 
-        top: 5px !important;     /* Mucho más arriba */
-        left: 5px !important;    /* Más a la izquierda (pegado al borde) */
-        right: auto !important;  /* Asegura que no se pegue a la derecha */
+        top: 10px !important;    
+        left: 10px !important;   
+        right: auto !important;
         padding: 8px 10px !important; 
-        font-size: 10px !important; /* Letra pequeña para que no ocupe mucho */
+        font-size: 10px !important;
         z-index: 5000;
     }
 
-    /* Ajuste extra: Mover el nombre de usuario un poco más abajo para que no choque */
+    /* 2. NOMBRE AGENTE: Centrado arriba, entre los botones */
     #username-display {
-        margin-top: 40px; /* Empuja el nombre hacia abajo */
+        display: block;
+        margin-top: 15px;        /* Espacio desde el techo */
+        margin-bottom: 0px;
+        font-size: 20px;         /* Tamaño ajustado para móvil */
+        position: relative;
+        z-index: 1100;
     }
 
-    /* Admin */
-    #admin-panel { padding: 16px; }
+    /* 3. PUNTOS (HUD): Debajo del nombre */
+    .resources-hud { 
+        position: fixed; 
+        top: 60px;               /* AQUÍ ESTÁ EL CAMBIO: Baja los puntos para que no toquen el nombre */
+        left: 0; 
+        right: 0; 
+        display: flex; 
+        justify-content: center; 
+        gap: 15px;               /* Espacio entre círculos */
+        z-index: 1200; 
+        pointer-events: none;
+    }
+
+    /* Ajuste visual de los círculos */
+    .resource-circle { 
+        width: 50px; 
+        height: 50px; 
+        font-size: 11px; 
+        pointer-events: auto; 
+        background: rgba(0, 0, 0, 0.8); /* Fondo más oscuro para que se lea mejor */
+    }
+    .res-label { display: block; font-size: 8px; }
+
+    /* 4. ÁRBOL: Empujado hacia abajo para que no empiece detrás de los puntos */
+    #main-interface { 
+        padding-top: 140px;      /* Espacio reservado para Nombre + Puntos */
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    /* SCROLL HORIZONTAL (Arreglado) */
+    .tree-container { 
+        padding: 10px; 
+        overflow-x: auto; 
+        display: block; 
+        text-align: center; 
+        white-space: nowrap; 
+        -webkit-overflow-scrolling: touch; 
+    }
+    .tree { 
+        display: inline-block; 
+        min-width: auto; 
+        padding-right: 40px; 
+    }
+
+    /* Nodos más pequeños */
+    .node { min-width: 80px; max-width: 120px; padding: 8px; font-size: 12px; }
+    .node .node-icon { width: 22px; height: 22px; }
+
+    /* Configuración y Admin */
+    #config-menu { left: 10px; right: 10px; top: auto; bottom: 10px; width: auto; border-radius: 10px; padding: 12px; }
+    .config-item { display: block; margin-bottom: 8px; }
+    .config-close { width: 100%; }
+    
+    #admin-back-btn { bottom: 20px; right: 12px; }
+    #admin-panel { padding: 16px; padding-top: 60px; } /* Padding extra en admin por los botones */
     table { font-size: 12px; }
     th, td { padding: 6px; }
 }
