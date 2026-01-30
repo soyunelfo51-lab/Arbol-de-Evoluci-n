@@ -1420,51 +1420,5 @@ body.light-mode table, body.light-mode th, body.light-mode td, body.light-mode t
 
 body.light-mode .btn-minus { background: var(--neon-purple) !important; color: white !important; }
 
-/* --- RESPONSIVE / MOBILE --- */
-@media (max-width: 900px) {
-    /* Layout stacking */
-    .resources-hud { position: fixed; top: 80px; left: 10px; right: 10px; display:flex; justify-content:space-between; gap:10px; z-index:1200; }
-    .resource-circle { width: 52px; height:52px; font-size: 12px; }
-    .res-label { display:block; font-size: 9px; }
 
-    /* Reduce large paddings */
-    #main-interface { padding: 10px; }
-
-    /* Login box centered and smaller */
-    #login-screen .login-box { width: calc(100% - 40px); margin: 20px auto; padding: 18px; box-shadow: 0 0 30px rgba(102,0,255,0.15); }
-    #login-screen .login-box h1 { font-size: 20px; }
-    #login-screen input { padding: 10px; font-size: 14px; }
-    #login-screen .scroll-down-btn { padding: 10px 12px; font-size: 14px; }
-
-    /* Tree container becomes vertical scroll with full width */
-    .tree-container { padding: 10px; overflow-x: auto; }
-    .tree { min-width: 700px; }
-
-    /* Nodes scale down on small screens */
-    .node { min-width: 80px; max-width: 120px; padding: 8px; font-size: 12px; }
-    .node .node-icon { width: 22px; height:22px; }
-
-    /* Control buttons reposition */
-    #config-btn { right: 12px; top: 12px; left: auto; }
-    #logout-btn { left: 12px; top: 12px; right: auto; }
-    #admin-back-btn { bottom: 20px; right: 12px; }
-
-    /* Config menu full width bottom sheet */
-    #config-menu { left: 10px; right: 10px; top: auto; bottom: 10px; width: auto; border-radius: 10px; padding: 12px; }
-    .config-item { display: block; margin-bottom: 8px; }
-    .config-close { width: 100%; }
-
-    /* Admin panel responsive */
-    #admin-panel { padding: 16px; }
-    table { font-size: 12px; }
-    th, td { padding: 6px; }
-}
-
-@media (max-width: 420px) {
-    .tree { min-width: 560px; }
-    .resource-circle { width: 46px; height:46px; }
-    #username-display { font-size: 14px; left: 50%; transform: translateX(-50%); }
-    .login-box { padding: 14px; }
-    .welcome-title { font-size: 20px; }
-}
 
