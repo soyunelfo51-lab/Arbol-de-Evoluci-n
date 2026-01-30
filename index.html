@@ -117,6 +117,40 @@
         .tree li:first-child::after { border-radius: 5px 0 0 0; }
         .tree ul ul::before { content: ''; position: absolute; top: 0; left: 50%; border-left: 1px solid var(--line-color); width: 0; height: 25px; }
         .tree li.unlocked::before, .tree li.unlocked::after, .tree li.unlocked > ul ul::before { border-color: var(--neon-blue); box-shadow: 0 0 8px var(--neon-blue); }
+    
+        /* --- BOTÓN CERRAR SESIÓN --- */   
+        #logout-btn {
+          /* POSICIÓN */
+          position: fixed;
+         top: 20px;
+         right: 20px;
+         z-index: 5000;
+
+          /* TAMAÑO - AQUÍ ESTÁ EL ARREGLO */
+          width: auto !important; /* Fuerza al botón a ser solo del tamaño del texto */
+         display: inline-block;  /* Asegura que no ocupe toda la línea */
+         padding: 5px 15px;      /* Relleno pequeño */
+
+          /* ESTILO VISUAL */
+          background: rgba(40, 0, 0, 0.6); 
+          border: 1px solid var(--danger-red);
+         color: var(--danger-red);
+          font-family: 'Rajdhani', sans-serif;
+          font-size: 10px;
+          font-weight: bold;
+          letter-spacing: 1px;
+          cursor: pointer;
+          text-transform: uppercase;
+    
+          /* EFECTOS */
+          clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);transition: all 0.3s ease;
+        }
+
+        #logout-btn:hover {
+           background: var(--danger-red);
+         color: white;
+          box-shadow: 0 0 10px var(--danger-red);
+        }
 
         /* NODOS */
         .node { border: 1px solid #444; background: rgba(10, 10, 20, 0.9); padding: 10px 12px; text-decoration: none; color: #888; font-size: 12px; display: inline-flex; align-items: center; gap: 8px; border-radius: 4px; transition: all 0.3s; cursor: pointer; min-width: 100px; max-width: 140px; white-space: normal; line-height: 1.2; position: relative; text-align: left; clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); }
@@ -145,8 +179,9 @@
         .btn-minus { background: #333; color: #fff; }
         .btn-del { background: var(--danger-red); color: white; }
         .btn-view { background: var(--neon-gold); color: black; }
-        #admin-back-btn { display: none; position: fixed; top: 20px; right: 20px; background: var(--danger-red); color: white; padding: 10px 20px; z-index: 1000; box-shadow: 0 0 15px var(--danger-red); border:none; font-weight: bold; cursor: pointer; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); }
-
+        #admin-back-btn { display: none; position: fixed; bottom: 90px; /* Lo ponemos abajo, encima del footer */right: 20px; /* A la derecha */background: rgba(255, 42, 42, 0.6); /* Rojo semitransparente */color: white; padding: 5px 15px; /* Más pequeño */font-size: 10px; /* Letra pequeña */z-index: 1000; box-shadow: 0 0 10px var(--danger-red); border: 1px solid rgba(255,255,255,0.3); font-weight: bold; cursor: pointer; text-transform: uppercase;clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); transition: all 0.3s ease;}
+        #admin-back-btn:hover {background: var(--danger-red);opacity: 1;transform: scale(1.1); box-shadow: 0 0 20px var(--danger-red);}
+        
     </style>
 </head>
 <body>
@@ -186,6 +221,7 @@
     </div>
 
     <div id="main-interface">
+        <button id="logout-btn" onclick="logoutSystem()">CERRAR SESIÓN</button>
         <button id="admin-back-btn" onclick="exitViewMode()">CERRAR VISTA REMOTA</button>
 
         <div class="resources-hud">
@@ -208,20 +244,20 @@
                             <li>
                                 <div class="node" onclick="unlockNode(this, 'stats_base')" id="stats_base">
                                     <img src="https://cdn-icons-png.flaticon.com/512/2503/2503493.png" class="node-icon" alt="Stats">
-                                    <div>Stats<span class="desc">+100kg F/R</span></div>
+                                    <div>Stats<span class="desc"></span></div>
                                 </div>
                                 <ul>
                                     <li><div class="node" onclick="tryUnlockMutual(this, 's_fuerza', ['s_resis'])" id="s_fuerza">Fuerza</div>
                                         <ul><li><div class="node" onclick="unlockNode(this, 'f_200')" id="f_200">+200</div>
                                             <ul><li><div class="node" onclick="unlockNode(this, 'f_500')" id="f_500">+500</div>
-                                                <ul><li><div class="node" onclick="unlockNode(this, 'f_1200')" id="f_1200">+1200</div></li></ul>
+                                                <ul><li><div class="node" onclick="unlockNode(this, 'f_1200')" id="f_1200">+1300</div></li></ul>
                                             </li></ul>
                                         </li></ul>
                                     </li>
                                     <li><div class="node" onclick="tryUnlockMutual(this, 's_resis', ['s_fuerza'])" id="s_resis">Resis.</div>
                                         <ul><li><div class="node" onclick="unlockNode(this, 'r_200')" id="r_200">+200</div>
                                             <ul><li><div class="node" onclick="unlockNode(this, 'r_500')" id="r_500">+500</div>
-                                                <ul><li><div class="node" onclick="unlockNode(this, 'r_1200')" id="r_1200">+1200</div></li></ul>
+                                                <ul><li><div class="node" onclick="unlockNode(this, 'r_1200')" id="r_1200">+1300</div></li></ul>
                                             </li></ul>
                                         </li></ul>
                                     </li>
@@ -493,6 +529,8 @@
             document.getElementById('tree-username').innerText = currentUser;
             document.getElementById('username-display').innerText = isAdminViewing ? "VISTA REMOTA: " + currentUser : "Agente: " + currentUser;
             
+            document.getElementById('logout-btn').style.display = isAdminViewing ? 'none' : 'block';
+
             updateHUD();
             renderTreeState();
         }
@@ -522,56 +560,136 @@
         }
 
         // --- ACCIONES DEL ÁRBOL (Guardan en la Nube) ---
-        function unlockNode(el, id) {
-            if(isAdminViewing) return alert("Modo espectador. No puedes comprar.");
-            if(!currentUserData) return;
+function unlockNode(el, id) {
+    // HE ELIMINADO LA LÍNEA QUE BLOQUEABA AL ADMIN (isAdminViewing)
+    
+    if(!currentUserData) return;
 
-            if(currentUserData.unlocked && currentUserData.unlocked.includes(id)) return;
-            if(currentUserData.locked && currentUserData.locked.includes(id)) return alert("Bloqueado");
+    // Verificaciones normales
+    if(currentUserData.unlocked && currentUserData.unlocked.includes(id)) return;
+    if(currentUserData.locked && currentUserData.locked.includes(id)) return alert("Bloqueado");
 
-            if(currentUserData.points.yellow > 0) {
-                if(confirm("¿Gastar 1 punto?")) {
-                    let newPoints = currentUserData.points.yellow - 1;
-                    let newUnlocked = currentUserData.unlocked ? [...currentUserData.unlocked, id] : [id];
-                    
-                    db.ref('users/' + currentUser).update({
-                        'points/yellow': newPoints,
-                        'unlocked': newUnlocked
-                    });
-                }
-            } else {
-                alert("Faltan puntos");
-            }
-        }
-        
-        function tryUnlockMutual(el, myId, rivals) {
-            if(isAdminViewing) return alert("Modo espectador.");
-            if(!currentUserData) return;
+    // Lógica de compra
+    if(currentUserData.points.yellow > 0) {
+        // Mensaje diferente si eres admin para que sepas que estás editando a otro
+        let msg = isAdminViewing ? 
+                  "ADMIN: ¿Gastar 1 punto de " + currentUser + "?" : 
+                  "¿Gastar 1 punto?";
 
-            if(currentUserData.unlocked && currentUserData.unlocked.includes(myId)) return;
+        if(confirm(msg)) {
+            let newPoints = currentUserData.points.yellow - 1;
+            let newUnlocked = currentUserData.unlocked ? [...currentUserData.unlocked, id] : [id];
             
-            let isLocked = false;
-            if(currentUserData.unlocked) {
-                rivals.forEach(r => { if(currentUserData.unlocked.includes(r)) isLocked = true; });
-            }
-            if(isLocked) return alert("Ya elegiste el otro camino");
-
-            if(currentUserData.points.yellow > 0) {
-                if(confirm("Elección permanente. ¿Seguro?")) {
-                    let newPoints = currentUserData.points.yellow - 1;
-                    let newUnlocked = currentUserData.unlocked ? [...currentUserData.unlocked, myId] : [myId];
-                    let newLocked = currentUserData.locked ? [...currentUserData.locked, ...rivals] : rivals;
-
-                    db.ref('users/' + currentUser).update({
-                        'points/yellow': newPoints,
-                        'unlocked': newUnlocked,
-                        'locked': newLocked
-                    });
-                }
-            } else {
-                alert("Faltan puntos");
-            }
+            // Esto actualiza la base de datos del usuario actual (o el observado)
+            db.ref('users/' + currentUser).update({
+                'points/yellow': newPoints,
+                'unlocked': newUnlocked
+            });
         }
+    } else {
+        alert("Faltan puntos");
+    }
+}
+
+// Función para obtener todos los IDs hijos, nietos, etc. de un nodo
+function getAllDescendants(nodeId) {
+    const el = document.getElementById(nodeId);
+    if (!el) return [];
+    
+    // Buscamos el LI padre que contiene al nodo y a su sub-lista (ul)
+    const parentLi = el.parentElement;
+    if (!parentLi) return [];
+
+    // Buscamos todos los elementos con clase .node dentro de este LI
+    const allNodes = parentLi.querySelectorAll('.node');
+    
+    let ids = [];
+    allNodes.forEach(node => {
+        // Agregamos todos MENOS el propio nodo padre (para no duplicarlo luego)
+        if (node.id !== nodeId) {
+            ids.push(node.id);
+        }
+    });
+    return ids;
+}
+
+        
+function tryUnlockMutual(el, myId, rivals) {
+    // Verificación de seguridad
+    if(!currentUserData) return;
+
+    // 1. Si ya lo tengo, salir
+    if(currentUserData.unlocked && currentUserData.unlocked.includes(myId)) return;
+    
+    // 2. Comprobar si está bloqueado visualmente o por lógica
+    let isLocked = false;
+    if(currentUserData.unlocked) {
+        rivals.forEach(r => { if(currentUserData.unlocked.includes(r)) isLocked = true; });
+    }
+    if(isLocked) return alert("Ya elegiste el otro camino (Bloqueo Mutuo)");
+
+    // 3. Comprobar puntos
+    if(currentUserData.points.yellow > 0) {
+        
+        let msg = isAdminViewing ? 
+                  "ADMIN: Elección permanente para " + currentUser + ". ¿Seguro?" : 
+                  "Elección permanente. ¿Seguro? Se bloqueará el camino opuesto.";
+
+        if(confirm(msg)) {
+            let newPoints = currentUserData.points.yellow - 1;
+            
+            // Lista de desbloqueados
+            let newUnlocked = currentUserData.unlocked ? [...currentUserData.unlocked, myId] : [myId];
+
+            // --- AQUÍ ESTÁ LA MAGIA DEL BLOQUEO DE HIJOS ---
+            // Empezamos con la lista actual de bloqueados
+            let currentLocked = currentUserData.locked || [];
+            
+            // Creamos una lista con los rivales DIRECTOS
+            let nodesToLock = [...rivals];
+
+            // Para cada rival, buscamos también a toda su descendencia (hijos, nietos...)
+            rivals.forEach(rivalId => {
+                let descendants = getAllDescendants(rivalId);
+                nodesToLock = [...nodesToLock, ...descendants];
+            });
+
+            // Combinamos todo y quitamos duplicados usando Set
+            let finalLocked = [...new Set([...currentLocked, ...nodesToLock])];
+            // ------------------------------------------------
+
+            db.ref('users/' + currentUser).update({
+                'points/yellow': newPoints,
+                'unlocked': newUnlocked,
+                'locked': finalLocked
+            });
+        }
+    } else {
+        alert("Faltan puntos (Amarillos)");
+    }
+}
+
+
+// --- CERRAR SESIÓN ---
+function logoutSystem() {
+    // 1. Dejar de escuchar cambios en Firebase para ahorrar recursos
+    if (currentUser) {
+        db.ref('users/' + currentUser).off();
+    }
+
+    // 2. Limpiar variables
+    currentUser = null;
+    currentUserData = null;
+
+    // 3. Volver al login
+    showLogin();
+    
+    // Opcional: Recargar la página para limpiar visualmente el árbol 100%
+    // location.reload(); 
+    // Si prefieres que sea fluido sin recargar, usa showLogin() y asegúrate de limpiar clases:
+    document.querySelectorAll('.node').forEach(el => el.classList.remove('unlocked', 'locked-forever'));
+}
+
 
         // --- STAFF / ADMIN ---
         function checkStaffCode(e) {
@@ -633,34 +751,48 @@
             }
         }
 
-        window.viewUserTree = function(userKey) {
-            db.ref('users/' + userKey).once('value', (snapshot) => {
-                if(snapshot.exists()){
-                    const data = snapshot.val();
-                    currentUser = data.username;
-                    currentUserData = data;
-                    isAdminViewing = true;
+window.viewUserTree = function(userKey) {
+    // CAMBIO CLAVE: Usamos .on() en lugar de .once()
+    // Así, si modificas algo (gastas puntos), la pantalla se entera y se actualiza sola.
+    db.ref('users/' + userKey).on('value', (snapshot) => {
+        if(snapshot.exists()){
+            const data = snapshot.val();
+            
+            // Actualizamos las variables globales con los datos frescos
+            currentUser = data.username;
+            currentUserData = data;
+            isAdminViewing = true;
 
-                    document.getElementById('admin-panel').style.display = 'none';
-                    document.getElementById('main-interface').style.display = 'block';
-                    document.getElementById('admin-back-btn').style.display = 'block';
-                    
-                    document.getElementById('tree-username').innerText = currentUser;
-                    document.getElementById('username-display').innerText = "VISTA REMOTA: " + currentUser;
-                    
-                    updateHUD();
-                    renderTreeState();
-                }
-            });
-        };
-
-        function exitViewMode() {
-            isAdminViewing = false;
-            currentUser = null;
-            document.getElementById('main-interface').style.display = 'none';
-            document.getElementById('admin-back-btn').style.display = 'none';
-            document.getElementById('admin-panel').style.display = 'block';
+            // Mostrar interfaz
+            document.getElementById('admin-panel').style.display = 'none';
+            document.getElementById('main-interface').style.display = 'block';
+            document.getElementById('admin-back-btn').style.display = 'block';
+            
+            // Textos
+            document.getElementById('tree-username').innerText = currentUser;
+            document.getElementById('username-display').innerText = "VISTA REMOTA: " + currentUser;
+            
+            // Renderizar árbol y puntos actualizados
+            updateHUD();
+            renderTreeState();
         }
+    });
+};
+
+function exitViewMode() {
+    // Si estábamos viendo a alguien, dejamos de escuchar sus cambios
+    if(currentUser) {
+        db.ref('users/' + currentUser).off(); 
+    }
+
+    isAdminViewing = false;
+    currentUser = null;
+    currentUserData = null; // Limpiamos datos
+
+    document.getElementById('main-interface').style.display = 'none';
+    document.getElementById('admin-back-btn').style.display = 'none';
+    document.getElementById('admin-panel').style.display = 'block';
+}
 
     </script>
 </body>
